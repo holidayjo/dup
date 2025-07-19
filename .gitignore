@@ -1,2 +1,9 @@
 mmdet/
 weights/
+yolov7_udp/runs/
+yolov9_udp/runs/
+data/DUP.zip
+*.pt
+*.pth
+*.git
+mmdetection/
