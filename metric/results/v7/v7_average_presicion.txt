@@ -1,0 +1,3 @@
+average_presicion_D = 0.9817624105823329
+average_presicion_P = 0.9790573830019179
+average_presicion_U = 0.9743846474703003
