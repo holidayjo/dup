@@ -1,0 +1,6 @@
+1)
+python path_replacer.py --path_image_folder /home/hj/Desktop/Dad/github/DUP/data/test --path_txt /home/hj/Desktop/Dad/github/DUP/yolo_to_coco/udp/test_list.txt
+2)
+python main.py --path /home/hj/Desktop/Dad/github/DUP/yolo_to_coco/udp/train_list.txt --output train.json
+python main.py --path /home/hj/Desktop/Dad/github/DUP/yolo_to_coco/udp/val_list.txt --output val.json 
+python main.py --path /home/hj/Desktop/Dad/github/DUP/yolo_to_coco/udp/test_list.txt --output test.json

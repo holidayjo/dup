@@ -67,11 +67,15 @@ def convert_yolo_to_coco(image_dir):
                         annotation_id += 1
 
             image_id += 1
+            if w <= 0 or h <= 0:
+                print(f"Skipping invalid bbox in {txt_path}: {x}, {y}, {w}, {h}")
+                continue
 
     return coco
 
 # Generate COCO annotation
 coco_json = convert_yolo_to_coco(IMAGE_DIR)
+
 
 # Save to file
 output_path = os.path.join(output_DIR, 'annotations.json')
