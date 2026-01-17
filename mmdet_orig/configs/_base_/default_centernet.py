@@ -1,0 +1,239 @@
+#%% (1) Defining Dataset --> coco detection.py
+
+# dataset settings
+dataset_type = 'CocoDataset' # located in /content/drive/MyDrive/IEEE_Access/code/mmdet/mmdet/datasets/__init__.py
+                             # We selected CocoDataset.
+data_root    = '/home/hj/Desktop/Dad/github/DUP/data/'  # The location of dataset.
+
+# Example to use different file client
+# Method 1: simply set the data root and let the file I/O module
+# automatically infer from prefix (not support LMDB and Memcache yet)
+
+# data_root = 's3://openmmlab/datasets/detection/coco/'
+
+# Method 2: Use `backend_args`, `file_client_args` in versions before 3.0.0rc6
+# backend_args = dict(
+#     backend='petrel',
+#     path_mapping=dict({
+#         './data/': 's3://openmmlab/datasets/detection/',
+#         'data/': 's3://openmmlab/datasets/detection/'
+#     }))
+backend_args = None
+
+train_pipeline = [
+    dict(type='LoadImageFromFile', backend_args=backend_args),
+    dict(type='LoadAnnotations',   with_bbox=True),
+    dict(type='Resize',            scale=(320, 320), keep_ratio=True),
+    dict(type='RandomFlip',        prob=0.0),
+    dict(type='PackDetInputs')]
+
+test_pipeline = [dict(type='LoadImageFromFile', backend_args=backend_args),
+                 dict(type='Resize',            scale=(320, 320), keep_ratio=True),
+                 # If you don't have a gt annotation, delete the pipeline
+                 dict(type      ='LoadAnnotations',   with_bbox=True),
+                 dict(type      = 'PackDetInputs',
+                      meta_keys = ('img_id', 'img_path', 'ori_shape', 'img_shape', 'scale_factor'))]
+
+train_dataloader = dict(batch_size         = 2,
+                        num_workers        = 2,
+                        persistent_workers = True,
+                        sampler            = dict(type         = 'DefaultSampler', shuffle=True),
+                        batch_sampler      = dict(type         = 'AspectRatioBatchSampler'),
+                        dataset            = dict(type         = dataset_type,
+                                                  data_root    = data_root,
+                                                  ann_file     =          '/home/hj/Desktop/Dad/github/DUP/data/coco_train.json',
+                                                  data_prefix  = dict(img='/home/hj/Desktop/Dad/github/DUP/data/train/'),
+                                                  filter_cfg   = dict(filter_empty_gt=True, min_size=32),
+                                                  pipeline     = train_pipeline,
+                                                  backend_args = backend_args))
+
+val_dataloader = dict(batch_size         = 1,
+                      num_workers        = 2,
+                      persistent_workers = True,
+                      drop_last          = False,
+                      sampler            = dict(type = 'DefaultSampler', shuffle = False),
+                      dataset            = dict(type         = dataset_type,
+                                                data_root    = data_root,
+                                                ann_file     =          '/home/hj/Desktop/Dad/github/DUP/data/coco_val.json',
+                                                data_prefix  = dict(img='/home/hj/Desktop/Dad/github/DUP/data/val/'),
+                                                # ann_file     = 'D:/Github/DUP/dataset/COCO_format_1/val/val.json',
+                                                # data_prefix  = dict(img='D:/Github/DUP/dataset/COCO_format_1/val/images/'),
+                                                test_mode    = True,
+                                                pipeline     = test_pipeline,
+                                                backend_args = backend_args))
+
+test_dataloader = dict(batch_size         = 1,
+                       num_workers        = 1,
+                       persistent_workers = True,
+                       drop_last          = False,
+                       sampler            = dict(type = 'DefaultSampler', shuffle = False),
+                       dataset            = dict(type         = dataset_type,
+                                                 data_root    = data_root,
+                                                 ann_file     =          '/home/hj/Desktop/Dad/github/DUP/data/coco_test.json',
+                                                 data_prefix  = dict(img='/home/hj/Desktop/Dad/github/DUP/data/test/'),
+                                                 # ann_file     = 'D:/Github/DUP/dataset/COCO_format_1/val/val.json',
+                                                 # data_prefix  = dict(img='D:/Github/DUP/dataset/COCO_format_1/val/images/'),
+                                                 test_mode    = True,
+                                                 pipeline     = test_pipeline,
+                                                 backend_args = backend_args))
+# test_dataloader = dict(batch_size         = 1,
+#                        num_workers        = 1
+#                        persistent_workers = True,
+#                        drop_last          = False,
+#                        sampler            = dict(type = 'DefaultSampler', shuffle = False),
+#                        dataset            = dict(type        = dataset_type,
+#                                                  data_root   = data_root,
+#                                                  ann_file    = data_root + 'val/val.json',
+#                                                  data_prefix = dict(img='/content/data_mmdet/one_image/val/images/'),
+#                                                  test_mode   = True,
+#                                                  pipeline    = test_pipeline))
+
+
+
+val_evaluator = dict(type         = 'CocoMetric',
+                     ann_file     = data_root + 'coco_val.json',
+                    #  ann_file     = data_root + 'train/train.json',
+                     metric       = 'bbox',
+                     format_only  = False,
+                     backend_args = backend_args)
+
+test_evaluator = dict(type           = 'CocoMetric',
+                      metric         = 'bbox',
+                      format_only    = True,
+                      ann_file       = data_root + 'coco_test.json',
+                      outfile_prefix = './work_dirs/coco_detection/test_centernet')
+
+
+#%% (2) Model : Faster-RCNN using Resnet50 as a backbone.
+# _base_ = '../common/lsj-200e_coco-detection.py'
+
+image_size     = (320, 320) # (1024, 1024)
+batch_augments = [dict(type='BatchFixedSizePad', size=image_size)]
+
+model = dict(
+    type='CenterNet',
+    data_preprocessor=dict(
+        type='DetDataPreprocessor',
+        mean=[123.675, 116.28, 103.53],
+        std=[58.395, 57.12, 57.375],
+        bgr_to_rgb=True,
+        pad_size_divisor=32,
+        batch_augments=batch_augments),
+    backbone=dict(
+        type='ResNet',
+        depth=50,
+        num_stages=4,
+        out_indices=(0, 1, 2, 3),
+        frozen_stages=1,
+        norm_cfg=dict(type='BN', requires_grad=True),
+        norm_eval=True,
+        style='pytorch',
+        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
+    neck=dict(
+        type='FPN',
+        in_channels=[256, 512, 1024, 2048],
+        out_channels=256,
+        start_level=1,
+        add_extra_convs='on_output',
+        num_outs=5,
+        init_cfg=dict(type='Caffe2Xavier', layer='Conv2d'),
+        relu_before_extra_convs=True),
+    bbox_head=dict(
+        type='CenterNetUpdateHead',
+        num_classes=3,
+        in_channels=256,
+        stacked_convs=4,
+        feat_channels=256,
+        strides=[8, 16, 32, 64, 128],
+        loss_cls=dict(
+            type='GaussianFocalLoss',
+            pos_weight=0.25,
+            neg_weight=0.75,
+            loss_weight=1.0),
+        loss_bbox=dict(type='GIoULoss', loss_weight=2.0),
+    ),
+    train_cfg=None,
+    test_cfg=dict(
+        nms_pre=1000,
+        min_bbox_size=0,
+        score_thr=0.05,
+        nms=dict(type='nms', iou_threshold=0.5),
+        max_per_img=100))
+
+param_scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=0.00025,
+        by_epoch=False,
+        begin=0,
+        end=4000),
+    dict(
+        type='MultiStepLR',
+        begin=0,
+        end=25,
+        by_epoch=True,
+        milestones=[22, 24],
+        gamma=0.1)
+]
+
+# NOTE: `auto_scale_lr` is for automatically scaling LR,
+# USER SHOULD NOT CHANGE ITS VALUES.
+# base_batch_size = (8 GPUs) x (8 samples per GPU)
+# auto_scale_lr = dict(base_batch_size=64)
+
+
+#%% Schedules
+
+# training schedule for 1x
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=100, val_interval=1) # max_epochs=12 for 8 GPUs, 12*8=96 for a single GPU.
+val_cfg   = dict(type='ValLoop')
+test_cfg  = dict(type='TestLoop')
+
+# learning rate
+param_scheduler = [dict(type         = 'LinearLR', 
+                        start_factor = 0.001, 
+                        by_epoch     = False, 
+                        begin        = 0, 
+                        end          = 500),
+                   dict(type         = 'MultiStepLR',
+                        begin        = 0,
+                        end          = 12,
+                        by_epoch     = True,
+                        milestones   = [8, 11],
+                        gamma        = 0.1)]
+
+# optimizer
+optim_wrapper = dict(type      = 'OptimWrapper',
+                     optimizer = dict(type='SGD', lr=0.0025, momentum=0.9, weight_decay=0.0001))  # lr=0.02 for 8 GPUs, lr=0.025 for a single gpu.
+
+# Default setting for scaling LR automatically
+#   - `enable` means enable scaling LR automatically
+#       or not by default.
+#   - `base_batch_size` = (8 GPUs) x (2 samples per GPU).
+auto_scale_lr = dict(enable=True, base_batch_size=1) # base batch = 16
+
+
+#%% Original code of default_runtime.py
+default_scope = 'mmdet'
+default_hooks = dict(timer           = dict(type='IterTimerHook'),
+                     logger          = dict(type='LoggerHook', interval=50),
+                     param_scheduler = dict(type='ParamSchedulerHook'),
+                     checkpoint      = dict(type='CheckpointHook', interval=1), # saving weight after how many epochs ran.
+                     sampler_seed    = dict(type='DistSamplerSeedHook'),
+                     visualization   = dict(type='DetVisualizationHook'))
+
+env_cfg = dict(cudnn_benchmark = False,
+               mp_cfg          = dict(mp_start_method='fork', opencv_num_threads=0),
+               dist_cfg        = dict(backend='nccl'))
+
+vis_backends  = [dict(type='LocalVisBackend')]
+visualizer    = dict(type         = 'DetLocalVisualizer', 
+                     vis_backends = vis_backends, 
+                     name         = 'visualizer')
+log_processor = dict(type        = 'LogProcessor', 
+                     window_size = 50, 
+                     by_epoch    = True)
+
+log_level = 'INFO'
+load_from = None # 'D:/Github/mmdetection/weights/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth' # None
+resume    = False

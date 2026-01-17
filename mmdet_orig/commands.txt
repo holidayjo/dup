@@ -1,0 +1,9 @@
+1. For train.
+    1) python tools/train.py configs/_base_/default_runtime.py
+    2) python tools/train.py configs/_base_/default_centernet.py
+2. For test.
+    1) python tools/test.py configs/_base_/default_runtime.py            work_dirs/default_runtime/epoch_15.pth --show-dir D:/Github/mmdetection/work_dirs/results/ --show
+    2) python tools/test.py configs/_base_/default_runtime_fasterrcnn.py D:\Github\mmdetection\work_dirs_fasterRCNN\default_runtime\epoch_10.pth --out results/faster_rcnn_result_10_train.pkl
+    3) python tools/test.py configs/_base_/default_centernet.py          D:\Github\mmdetection\work_dirs_centernet\default_centernet\epoch_20.pth --out results/centernet_result_train.pkl
+3. for webcam
+    1) python demo/webcam_demo.py configs/_base_/default_centernet.py D:\Github\mmdetection\work_dirs_centernet\default_centernet\epoch_20.pth

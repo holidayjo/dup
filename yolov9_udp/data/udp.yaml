@@ -1,7 +1,7 @@
 # train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
-train: /home/hj/Desktop/Dad/github/DUP/data/train  # 118287 images
-val:   /home/hj/Desktop/Dad/github/DUP/data/val  # 5000 images
-test:  /home/hj/Desktop/Dad/github/DUP/data/test  # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794
+train: /mnt/Documents/Dad/github/DUP/data/euljiro_1st_accu_test/train  # 118287 images
+val:   /mnt/Documents/Dad/github/DUP/data/euljiro_1st_accu_test/val  # 5000 images
+test:  /mnt/Documents/Dad/github/DUP/data/euljiro_1st_accu_test/val/val/pm_peak
 
 # number of classes
 nc: 3
