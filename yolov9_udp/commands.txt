@@ -164,3 +164,45 @@ do
         --task test \
         --name "eval_yolov9_seed_${seed}"
 done
+
+
+### data augmentation off test ###
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch 80 \
+    --data data/udp_euljiro_bal_train_val.yaml \
+    --img 320 \
+    --cfg models/detect/udp_gelan-c.yaml \
+    --weights 'gelan-c.pt' \
+    --name v9_320_no_aug_gelan-c_train_val \
+    --hyp data/hyps/udp_no_aug.yaml \
+    --epochs 100 \
+    --seed 0
+
+### No augmentation 320 yolov9 19epochs ###
+# Stop immediately if any command fails (optional, helps debug crashes)
+set -e 
+
+for seed in 0 1 2 3 4
+do
+    echo "=================================================="
+    echo "STARTING: No augmentation 320 YOLOv9 seed_${seed}"
+    echo "=================================================="
+
+    python train.py \
+        --workers 4 \
+        --device 0 \
+        --batch 80 \
+        --data data/udp_euljiro_bal_TrainVal.yaml \
+        --img 320 \
+        --cfg models/detect/udp_gelan-c.yaml \
+        --weights 'gelan-c.pt' \
+        --hyp data/hyps/udp_no_aug.yaml \
+        --epochs 19 \
+        --seed ${seed} \
+        --name "v9_320_no_aug_gelan-c_TrainVal_epoch_18_${seed}"
+
+    echo "Finished seed ${seed}. Sleeping for 30 seconds to clear GPU..."
+    sleep 30
+done
