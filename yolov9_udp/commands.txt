@@ -1,0 +1,166 @@
+* commands (Run at yolov9 folder.)
+python train_dual.py --workers 8 --device 0 --batch 50 --data data/udp.yaml --img 320 --cfg models/detect/yolov9-c.yaml --weights 'yolov9-c' --name yolov9-c --hyp data/hyps/udp.yaml --min-items 0 --epochs 180 --close-mosaic 15
+
+
+### Train from scratch ###
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch 80 \
+    --data data/udp_euljiro_unbal_scratch_train_val.yaml \
+    --img 320 \
+    --cfg models/detect/udp_gelan-c.yaml \
+    --weights '' \
+    --name train_from_scratch_euljiro_train_val \
+    --hyp hyps/udp.yaml \
+    --epochs 100 \
+    --seed 0
+
+### Train from scratch seed sweep ###
+for s in {0..4}
+do
+    echo "Running Seed $s..."
+    python train.py \
+        --workers 8 \
+        --device 0 \
+        --batch 80 \
+        --data data/udp_euljiro_unbal_scratch_TrainVal.yaml \
+        --img 320 \
+        --cfg models/detect/udp_gelan-c.yaml \
+        --weights '' \
+        --name train_from_scratch_euljiro_320_TrainVal_epoch_76_seed$s \
+        --hyp hyps/udp.yaml \
+        --epochs 77 \
+        --seed $s
+done
+
+
+
+###
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch 80 \
+    --data data/udp_chungmuro_sangsun_train_val_switched.yaml \
+    --img 320 \
+    --cfg models/detect/udp_gelan-c.yaml \
+    --weights 'gelan-c.pt' \
+    --name gelan-c \
+    --hyp hyps/udp.yaml \
+    --epochs 150 \
+    --seed 0\
+    --cal-train-map
+    
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch 20 \
+    --data data/udp_chungmuro_sangsun_train_val_switched.yaml \
+    --img 640 \
+    --cfg models/detect/udp_gelan-c.yaml \
+    --weights 'gelan-c.pt' \
+    --name gelan-c \
+    --hyp hyps/udp.yaml \
+    --epochs 150 \
+    --seed 0 \
+    --cal-train-map
+
+
+<1> chungmuro 160
+for s in {3..4}
+do
+    echo "Running Seed $s..."
+    python train.py \
+        --workers 8 \
+        --device 0 \
+        --batch 300 \
+        --data data/udp_chungmuro_sangsun_TrainVal_switched.yaml \
+        --img 160 \
+        --cfg models/detect/udp_gelan-c.yaml \
+        --weights 'gelan-c.pt' \
+        --name 2_1_3_chungmuro_sangsun_PM_rush_160_TrainVal_switch_epoch_115_seed$s \
+        --hyp hyps/udp.yaml \
+        --epochs 116 \
+        --seed $s
+done
+
+#############################################
+<2> chungmuro 640
+for s in {3..4}
+do
+    echo "Running Seed $s..."
+    python train.py \
+        --workers 8 \
+        --device 0 \
+        --batch 18 \
+        --data data/udp_chungmuro_sangsun_TrainVal_switched.yaml \
+        --img 640 \
+        --cfg models/detect/udp_gelan-c.yaml \
+        --weights 'gelan-c.pt' \
+        --name 2_1_1_chungmuro_sangsun_PM_rush_640_TrainVal_switch_epoch_139_seed$s \
+        --hyp hyps/udp.yaml \
+        --epochs 140 \
+        --seed $s
+done
+#############################################
+
+
+#############################################
+<3> chungmuro 320
+for s in {3..4}
+do
+    echo "Running Seed $s..."
+    python train.py \
+        --workers 8 \
+        --device 0 \
+        --batch 80 \
+        --data data/udp_chungmuro_sangsun_TrainVal_switched.yaml \
+        --img 320 \
+        --cfg models/detect/udp_gelan-c.yaml \
+        --weights 'gelan-c.pt' \
+        --name 2_1_1_chungmuro_sangsun_PM_rush_320_TrainVal_switch_epoch_147_seed$s \
+        --hyp hyps/udp.yaml \
+        --epochs 148 \
+        --seed $s
+done
+#############################################
+
+
+
+##### resume ####
+python train.py --resume runs/train/2_1_1_chungmuro_sangsun_PM_rush_640_TrainVal_switch_epoch_139_seed1/weights/last.pt --epoch 140
+
+
+## Chungmuro Hasun train vs val ##
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch 18 \
+    --data data/udp_chungmuro_hasun_train_val.yaml \
+    --img 640 \
+    --cfg models/detect/udp_gelan-c.yaml \
+    --weights 'gelan-c.pt' \
+    --name chungmuro_hasun_train_val_epoch \
+    --hyp hyps/udp.yaml \
+    --epochs 150 \
+    --seed 0
+
+
+    
+
+python val.py --data /mnt/Documents/Dad/github/DUP/yolov9_udp/data/udp.yaml --img 320 --weights /mnt/Documents/Dad/github/DUP/yolov9_udp/runs/train/gelan-c13/weights/best.pt --name gelan-c_val
+
+
+### validation test. for seed 0 to 4. ###
+for seed in 0 1 2 3 4
+do
+    echo "Testing YOLOv9 seed_${seed}..."
+    python val.py \
+        --weights "results_T_ITS_2026/Euljiro/1_2_2_Euljiro_off_peak_balanced_TrainVal_gelan-c_seed${seed}/weights/last.pt" \
+        --data "data/udp_euljiro_bal_TrainVal.yaml" \
+        --img 320 \
+        --conf 0.001 \
+        --iou 0.65 \
+        --task test \
+        --name "eval_yolov9_seed_${seed}"
+done

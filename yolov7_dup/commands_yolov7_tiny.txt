@@ -1,0 +1,64 @@
+### train from scatch ###
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch-size 200 \
+    --data data/DUP_scratch_train_val.yaml \
+    --img 320 320 \
+    --cfg cfg/training/yolov7-tiny_DUP.yaml \
+    --weights '' \
+    --name tiny_bal_from_scratch_320_ \
+    --hyp data/hyp.scratch.tiny_udp.yaml \
+    --epochs 100 \
+    --seed 0
+
+### TrainVal vs test seed sweep ###
+for seed in {0..4}
+do
+    echo "Starting training with seed $seed..."
+    python train.py \
+        --workers 8 \
+        --device 0 \
+        --batch-size 200 \
+        --data data/DUP_scratch_TrainVal.yaml \
+        --img 320 320 \
+        --cfg cfg/training/yolov7-tiny_DUP.yaml \
+        --weights '' \
+        --name "tiny_bal_from_scratch_320_TrainVal_${seed}" \
+        --hyp data/hyp.scratch.tiny_udp.yaml \
+        --epochs 98 \
+        --seed "$seed"
+done
+
+######
+
+for seed in {0..4}
+do
+    echo "Starting training with seed $seed..."
+    python train.py \
+        --workers 8 \
+        --device 0 \
+        --batch-size 80 \
+        --data /mnt/Documents/Dad/github/DUP/yolov7_dup/data/DUP_data.yaml \
+        --img 320 320 \
+        --cfg /mnt/Documents/Dad/github/DUP/yolov7_dup/cfg/training/yolov7-tiny_DUP.yaml \
+        --weights 'yolov7-tiny.pt' \
+        --name "2_yolov7_tiny_seed_${seed}" \
+        --hyp /mnt/Documents/Dad/github/DUP/yolov7_dup/data/hyp.scratch.tiny_udp.yaml \
+        --epochs 84 \
+        --seed "$seed"
+done
+
+### test.py ###
+for seed in 0 1 2 3 4
+do
+    echo "Testing seed_${seed}..."
+    python test.py \
+        --weights "runs/train/2_yolov7_tiny_seed_${seed}/weights/last.pt" \
+        --data "data/DUP_bal_TrainVal copy.yaml" \
+        --img-size 320 \
+        --conf-thres 0.001 \
+        --iou-thres 0.65 \
+        --task test \
+        --name "eval_seed_${seed}"
+done

@@ -1,12 +1,17 @@
-# --- Deep Learning / Large Files ---
+# --- Large Data Folders (Case Sensitive on Linux) ---
+DATA/
+data/
 mmdet/
 mmdetection/
+
+# --- Model Weights & Archives ---
 weights/
 yolov7_udp/runs/
 yolov9_udp/runs/
-data/
 *.pt
 *.pth
+*.zip
+*.tar.gz
 
 # --- Python & System Garbage ---
 __pycache__/
@@ -14,13 +19,6 @@ __pycache__/
 .ipynb_checkpoints/
 .DS_Store
 
-# --- Dangerous Wildcards (Restricted to specific folders) ---
-# Instead of ignoring ALL .txt/.png, ignore them only in data/runs folders
-# If you really want to ignore all, uncomment below and add exceptions:
-# *.png
-# *.txt
-# !requirements.txt  <-- You need this if you ignore *.txt
-
-# --- IDEs (Optional but recommended) ---
+# --- IDEs ---
 .vscode/
 .idea/

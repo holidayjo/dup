@@ -18,7 +18,3 @@ All dataset are not included in the repository even though it is private reposit
 The results from the mmdetection is converted to yolo format which is txt file per image throughout result_to_yolo.py file.
 
 
-* commands (Run at yolov9 folder.)
-python train_dual.py --workers 8 --device 0 --batch 50 --data data/udp.yaml --img 320 --cfg models/detect/yolov9-c.yaml --weights 'yolov9-c' --name yolov9-c --hyp data/hyps/udp.yaml --min-items 0 --epochs 180 --close-mosaic 15
-
-python train.py --workers 8 --device 0 --batch 80 --data /mnt/Documents/Dad/github/DUP/yolov9_udp/data/udp.yaml --img 320 --cfg models/detect/udp_gelan-c.yaml --weights 'gelan-c.pt' --name gelan-c --hyp hyps/udp.yaml --epochs 200

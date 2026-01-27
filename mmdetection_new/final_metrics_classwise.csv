@@ -1,0 +1,6 @@
+Model,Seed,mAP_50 (Total),mAP_Small,mAP_Medium,mAP_Large
+Faster R-CNN,0,95.5,23.0,59.199999999999996,74.0
+Faster R-CNN,1,94.5,28.199999999999996,60.8,74.5
+Faster R-CNN,2,94.8,23.3,62.9,74.7
+Faster R-CNN,3,95.3,21.8,61.5,75.9
+Faster R-CNN,4,95.5,28.9,61.8,73.2

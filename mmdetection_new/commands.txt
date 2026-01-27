@@ -1,0 +1,4 @@
+python /mnt/Documents/Dad/github/DUP/mmdetection_new/tools/train.py /mnt/Documents/Dad/github/DUP/mmdetection_new/configs/my_faster_rcnn.py
+python tools/train.py configs/_config_2026/UDP_centernet_train_val.py
+python /mnt/Documents/Dad/github/DUP/mmdetection_new/tools/train.py /mnt/Documents/Dad/github/DUP/mmdetection_new/configs/UDP_centernet_TrainVal_test.py
+    

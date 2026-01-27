@@ -1,0 +1,2 @@
+Model,mAP_50 (Total),mAP_Small,mAP_Medium,mAP_Large
+Faster R-CNN,95.12 ± 0.45,25.04 ± 3.26,61.24 ± 1.37,74.46 ± 0.99

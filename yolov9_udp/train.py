@@ -197,6 +197,23 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
 
     # Process 0
     if RANK in {-1, 0}:
+        # To calculate training mAP, we need a dataloader for the training data without augmentations
+        # This is optional as it slows down training
+        train_eval_loader = None
+        if opt.cal_train_map:
+            train_eval_loader = create_dataloader(train_path,
+                                           imgsz,
+                                           batch_size // WORLD_SIZE * 2,
+                                           gs,
+                                           single_cls,
+                                           hyp=hyp,
+                                           cache=None if noval else opt.cache,
+                                           rect=True,
+                                           rank=-1,
+                                           workers=workers * 2,
+                                           pad=0.5,
+                                           prefix=colorstr('train_eval: '))[0]
+        
         val_loader = create_dataloader(val_path,
                                        imgsz,
                                        batch_size // WORLD_SIZE * 2,
@@ -209,7 +226,7 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
                                        workers=workers * 2,
                                        pad=0.5,
                                        prefix=colorstr('val: '))[0]
-
+        
         if not resume:
             # if not opt.noautoanchor:
             #     check_anchors(dataset, model=model, thr=hyp['anchor_t'], imgsz=imgsz)  # run AutoAnchor
@@ -241,7 +258,7 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
     maps          = np.zeros(nc)  # mAP per class
     results       = (0, 0, 0, 0, 0, 0, 0)  # P, R, mAP@.5, mAP@.5-.95, val_loss(box, obj, cls)
     scheduler.last_epoch = start_epoch - 1  # do not move
-    scaler        = torch.cuda.amp.GradScaler(enabled=amp)
+    scaler        = torch.amp.GradScaler('cuda', enabled=amp)
     stopper, stop = EarlyStopping(patience=opt.patience), False
     compute_loss  = ComputeLoss(model)  # init loss class
     callbacks.run('on_train_start')
@@ -249,6 +266,12 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
                 f'Using {train_loader.num_workers * WORLD_SIZE} dataloader workers\n'
                 f"Logging results to {colorstr('bold', save_dir)}\n"
                 f'Starting training for {epochs} epochs...')
+    
+    # --- To store training mAP results ---
+    if opt.cal_train_map:
+        with open(save_dir / 'train_metrics.csv', 'w') as f:
+            f.write('epoch,train_map50,train_map50-95\n')
+    
     for epoch in range(start_epoch, epochs):  # epoch ------------------------------------------------------------------
         callbacks.run('on_train_epoch_start')
         model.train()
@@ -299,7 +322,7 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
                     imgs = nn.functional.interpolate(imgs, size=ns, mode='bilinear', align_corners=False)
 
             # Forward
-            with torch.cuda.amp.autocast(amp):
+            with torch.amp.autocast('cuda', enabled=amp):
                 pred = model(imgs)  # forward
                 loss, loss_items = compute_loss(pred, targets.to(device))  # loss scaled by batch_size
                 if RANK != -1:
@@ -342,20 +365,27 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
             ema.update_attr(model, include=['yaml', 'nc', 'hyp', 'names', 'stride', 'class_weights'])
             final_epoch = (epoch + 1 == epochs) or stopper.possible_stop
             if not noval or final_epoch:  # Calculate mAP
-                # print("why AttrributeError: results_train")
-                results_train, maps_train, _ = validate.run(data_dict,
-                                                            task = 'train',
-                                                            batch_size=batch_size // WORLD_SIZE * 2,
-                                                            imgsz=imgsz,
-                                                            half=amp,
-                                                            model=ema.ema,
-                                                            single_cls=single_cls,
-                                                            dataloader=val_loader,
-                                                            save_dir=save_dir,
-                                                            plots=False,
-                                                            callbacks=callbacks,
-                                                            compute_loss=compute_loss)
-                print("results_train = {}, maps_train = {}".format(results_train, maps_train))
+                # To calculate training mAP, we need a dataloader for the training data without augmentations
+                if opt.cal_train_map:
+                    results_train, _, _ = validate.run(data_dict,
+                                                       task='train',
+                                                       batch_size=batch_size // WORLD_SIZE * 2,
+                                                       imgsz=imgsz,
+                                                       half=amp,
+                                                       model=ema.ema,
+                                                       single_cls=single_cls,
+                                                       dataloader=train_eval_loader, # Use the new loader
+                                                       save_dir=save_dir,
+                                                       plots=False,
+                                                       callbacks=callbacks,
+                                                       compute_loss=compute_loss)
+                    
+                    # Save to CSV
+                    with open(save_dir / 'train_metrics.csv', 'a') as f:
+                        f.write(f"{epoch},{results_train[2]},{results_train[3]}\n")
+                # ----------------------
+                
+                # 3. Run validation on VALIDATION data
                 results, maps, _ = validate.run(data_dict,
                                                 batch_size=batch_size // WORLD_SIZE * 2,
                                                 imgsz=imgsz,
@@ -489,6 +519,7 @@ def parse_opt(known=False):
     parser.add_argument('--upload_dataset', nargs='?', const=True, default=False, help='Upload data, "val" option')
     parser.add_argument('--bbox_interval', type=int, default=-1, help='Set bounding-box image logging interval')
     parser.add_argument('--artifact_alias', type=str, default='latest', help='Version of dataset artifact to use')
+    parser.add_argument('--cal-train-map', action='store_true', help='Calculate mAP on training data (slows training)')
 
     return parser.parse_known_args()[0] if known else parser.parse_args()
 
