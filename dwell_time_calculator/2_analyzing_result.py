@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+from scipy.stats import expon
 
 # --- 1. Load Data ---
 # UPDATED: Read the file that contains the 'Saved Time' column
@@ -124,6 +125,39 @@ plt.tight_layout()
 plt.savefig(f'{plot_dir}/plot_a_distribution.png', dpi=300)
 plt.close()
 
+
+
+'''
+# --- PLOT B: REOPEN TIME DISTRIBUTION (With Theoretical Fit) ---
+plt.figure(figsize=(8, 6))
+
+# 1. Plot Histogram (Turn OFF KDE to avoid the negative-time confusion)
+sns.histplot(clean_reopen_times, binwidth=2, kde=False, stat="density",
+             color='#FF9800', alpha=0.6, label='Observed Data')
+
+# 2. Calculate Theoretical Exponential Curve
+# For exponential, the scale parameter is equal to the mean
+mu = clean_reopen_times.mean()  # The mean re-open time
+x_vals = np.linspace(0, clean_reopen_times.max(), 100) # Range from 0 to max data
+y_vals = expon.pdf(x_vals, scale=mu) # Calculate the ideal curve heights
+
+# 3. Plot the Theoretical Line
+plt.plot(x_vals, y_vals, 'r-', lw=3, label=f'Theoretical Exp. Fit\n($\mu={mu:.2f}s$)')
+
+# 4. Vertical Lines & Labels
+plt.axvline(avg_reopen_time, color='blue', linestyle='--', linewidth=2, label='Observed Mean')
+
+plt.xlabel('Re-open Duration (s)')
+plt.ylabel('Density (Probability)')
+plt.legend(loc='upper right')
+plt.grid(axis='y', alpha=0.3)
+plt.title("Re-open Duration vs. Ideal Exponential Model")
+
+plt.tight_layout()
+plt.savefig(f'{plot_dir}/plot_b_reopen_exponential_fit.png', dpi=300)
+plt.close()
+'''
+
 # --- PLOT B: REOPEN TIME DISTRIBUTION (New Logic) ---
 plt.figure(figsize=(8, 6))
 
@@ -138,7 +172,7 @@ plt.axvline(avg_reopen_time + std_reopen_time, color='red', linestyle=':', linew
             label=r'Mean + 1$\sigma$')
 
 # 3. Titles and Labels
-plt.title(fr"Re-open Duration ($\mu \approx \sigma \approx {avg_reopen_time:.1f}s$)", fontsize=18)
+# plt.title(fr"Re-open Duration ($\mu \approx \sigma \approx {avg_reopen_time:.1f}s$)", fontsize=18)
 plt.xlabel('Re-open Duration (s)')
 plt.ylabel('Frequency')
 plt.legend(loc='upper right')
