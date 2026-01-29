@@ -62,3 +62,18 @@ do
         --task test \
         --name "eval_seed_${seed}"
 done
+
+cd /mnt/Documents/Dad/github/DUP/yolov7_dup  # Or wherever your v7 folder is
+
+# Generate predictions
+python test.py \
+    --data data/DUP_bal_TrainVal.yaml \
+    --weights my_weights.pt \
+    --batch 16 \
+    --img 320 \
+    --task test \
+    --save-json \
+    --name yolov7_tiny_euljiro_320_json_seed0_val
+
+# Copy result
+cp runs/test/yolov7_tiny_euljiro_320_json_seed0_val9/my_weights_predictions.json ../mmdetection_new/work_dirs/yolov7_tiny_seed0.jsonn
