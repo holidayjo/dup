@@ -206,3 +206,39 @@ do
     echo "Finished seed ${seed}. Sleeping for 30 seconds to clear GPU..."
     sleep 30
 done
+
+
+
+
+### train_val 2 class ###
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch 80 \
+    --data data/udp_euljiro_bal_2class_train_val.yaml \
+    --img 320 \
+    --cfg models/detect/udp_gelan-c.yaml \
+    --weights 'gelan-c.pt' \
+    --name v9_320_2class_gelan-c_train_val \
+    --hyp data/hyps/udp.yaml \
+    --epochs 150 \
+    --seed 0
+
+
+### TrainVal 2 class ###
+for s in {0..4}
+do
+    echo "Starting training with seed $s..."
+    python train.py \
+        --workers 8 \
+        --device 0 \
+        --batch 80 \
+        --data data/udp_euljiro_bal_2class_TrainVal.yaml \
+        --img 320 \
+        --cfg models/detect/udp_gelan-c.yaml \
+        --weights 'gelan-c.pt' \
+        --name v9_320_2class_gelan-c_TrainVal_epoch49_seed$s \
+        --hyp data/hyps/udp.yaml \
+        --epochs 50 \
+        --seed $s
+done
