@@ -242,3 +242,61 @@ do
         --epochs 50 \
         --seed $s
 done
+
+
+### euljiro peak and off-peak 320 train val ###
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch 80 \
+    --data data/udp_euljiro_320_peak_n_off_peak_combined_train_val.yaml \
+    --img 320 \
+    --cfg models/detect/udp_gelan-c.yaml \
+    --weights 'gelan-c.pt' \
+    --name v9_320_peak_n_off_peak_train_val_epoch \
+    --hyp data/hyps/udp.yaml \
+    --epochs 150 \
+    --seed 0
+
+
+### train 5 times for peak and non-peak dataset combined. 320 ###
+for seed in {0..4}
+do
+    echo "----------------------------------------------------------------"
+    echo "Starting Training with Seed: $seed"
+    echo "----------------------------------------------------------------"
+    
+    python train.py \
+        --workers 4 \
+        --device 0 \
+        --batch 80 \
+        --data data/udp_euljiro_320_peak_n_off_peak_combined_TrainVal.yaml \
+        --img 320 \
+        --cfg models/detect/udp_gelan-c.yaml \
+        --weights 'gelan-c.pt' \
+        --name v9_320_peak_n_off_peak_TrainVal_epoch_70_seed${seed} \
+        --hyp data/hyps/udp.yaml \
+        --epochs 71 \
+        --seed $seed
+done
+
+
+for seed in {0..4}
+do
+    echo "----------------------------------------------------------------"
+    echo "Starting Training with Seed: $seed"
+    echo "----------------------------------------------------------------"
+    
+    python train.py \
+        --workers 4 \
+        --device 0 \
+        --batch 80 \
+        --data data/udp_euljiro_320_peak_n_off_peak_combined_TrainVal.yaml \
+        --img 320 \
+        --cfg models/detect/udp_gelan-c.yaml \
+        --weights 'gelan-c.pt' \
+        --name v9_320_peak_n_off_peak_TrainVal_epoch_115_seed${seed} \
+        --hyp data/hyps/udp.yaml \
+        --epochs 116 \
+        --seed $seed
+done
