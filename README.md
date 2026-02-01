@@ -24,6 +24,7 @@ If you are interested in the project and the dataset, contact us throughout the 
 
 "** below. To be updated **."
 
-The results from the mmdetection is converted to yolo format which is txt file per image throughout result_to_yolo.py file.
+(The results from the mmdetection is converted to yolo format which is txt file per image throughout result_to_yolo.py file. Not anymore for T-ITS version 2026.)
+
 
 
