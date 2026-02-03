@@ -1,8 +1,0 @@
-names:
-  0: U
-  1: D
-  2: P
-path: /mnt/Documents/Dad/github/DUP/DATA/Euljiro/4_peak_n_offpeak_combined/test_splitted/off_peak
-test: /mnt/Documents/Dad/github/DUP/DATA/Euljiro/4_peak_n_offpeak_combined/test_splitted/off_peak
-train: null
-val: /mnt/Documents/Dad/github/DUP/DATA/Euljiro/4_peak_n_offpeak_combined/test_splitted/off_peak
