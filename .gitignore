@@ -3,7 +3,7 @@ DATA/
 data/
 mmdet/
 mmdetection/
-
+IAA_survey/images_generated/
 # --- Model Weights & Archives ---
 weights/
 yolov7_udp/runs/
