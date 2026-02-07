@@ -10,9 +10,9 @@ _base_ = [
 
 # 1. PATHS & CLASSES
 data_root          = '/mnt/Documents/Dad/github/DUP/yolo_to_coco/output/'
-image_folder_train = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/train/'
-image_folder_val   = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/val/'
-image_folder_test  = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/val/'
+image_folder_train = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/TrainVal/'
+image_folder_val   = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/test/'
+image_folder_test  = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/test/'
 
 metainfo = {
     'classes': ('U', 'D', 'P'),
@@ -79,18 +79,20 @@ model = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile', to_float32=True), # CenterNet 필수 옵션
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(
-        type='RandomChoiceResize',
-        scales=[(1333, 640), (1333, 672), (1333, 704), (1333, 736),
-                (1333, 768), (1333, 800)],
-        keep_ratio=True),
+    dict(type='Resize', scale=(320, 320), keep_ratio=False),
+    # dict(
+    #     type='RandomChoiceResize',
+    #     scales=[(1333, 640), (1333, 672), (1333, 704), (1333, 736),
+    #             (1333, 768), (1333, 800)],
+    #     keep_ratio=True),
     dict(type='RandomFlip', prob=0.0), # 승객 데이터셋 특성상 Flip 비활성화
     dict(type='PackDetInputs')
 ]
 
 test_pipeline = [
     dict(type='LoadImageFromFile', to_float32=True),
-    dict(type='Resize', scale=(1333, 800), keep_ratio=True),
+    # dict(type='Resize', scale=(1333, 800), keep_ratio=True),
+    dict(type='Resize', scale=(320, 320), keep_ratio=False),
     dict(type='LoadAnnotations', with_bbox=True),
     dict(type='PackDetInputs', 
          meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape', 'scale_factor'))
@@ -98,15 +100,15 @@ test_pipeline = [
 
 # 4. DATALOADERS
 train_dataloader = dict(
-    batch_size=4, # RTX 4080 메모리 고려 (필요시 8로 상향 가능)
-    num_workers=4,
+    batch_size=80,
+    num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
         type='CocoDataset',
         metainfo=metainfo,
         data_root=data_root,
-        ann_file='train.json',
+        ann_file='TrainVal.json',
         data_prefix=dict(img=image_folder_train),
         pipeline=train_pipeline)
 )
@@ -118,7 +120,7 @@ val_dataloader = dict(
         type='CocoDataset',
         metainfo=metainfo,
         data_root=data_root,
-        ann_file='val.json',
+        ann_file='test.json',
         data_prefix=dict(img=image_folder_val),
         test_mode=True,
         pipeline=test_pipeline)
@@ -131,7 +133,7 @@ test_dataloader = dict(
         type='CocoDataset',
         metainfo=metainfo,
         data_root=data_root,
-        ann_file='val.json',
+        ann_file='test.json',
         data_prefix=dict(img=image_folder_test),
         test_mode=True,
         pipeline=test_pipeline)
@@ -140,7 +142,7 @@ test_dataloader = dict(
 # 5. EVALUATION
 val_evaluator = dict(
     type='CocoMetric',
-    ann_file=data_root + 'val.json',
+    ann_file=data_root + 'test.json',
     metric='bbox')
 test_evaluator = dict(
     type='CocoMetric',
@@ -148,7 +150,7 @@ test_evaluator = dict(
     metric='bbox')
 
 # 6. SCHEDULE (100 Epochs)
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=100, val_interval=1)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=8, val_interval=1)
 val_cfg   = dict(type='ValLoop')
 test_cfg  = dict(type='TestLoop')
 
@@ -168,7 +170,7 @@ default_hooks = dict(
     logger=dict(type='LoggerHook', interval=50)
 )
 
-work_dir = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_update_r50_udp'
+work_dir = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_r50_udp_TrainVal_epoch_8_seed'
 
 # 지정하신 Pretrained Weight 경로
 load_from = '/mnt/Documents/Dad/github/DUP/mmdetection_new/pre_trained_weights/centernet-update_r50-caffe_fpn_ms-1x_coco_20230512_203845-8306baf2.pth'
