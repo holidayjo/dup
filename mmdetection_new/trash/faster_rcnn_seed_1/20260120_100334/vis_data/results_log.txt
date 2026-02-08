@@ -1,0 +1,666 @@
+/mnt/Documents/Dad/github/DUP/mmdetection_new
+01/20 16:20:49 - mmengine - [4m[97mINFO[0m - 
+------------------------------------------------------------
+System environment:
+    sys.platform: linux
+    Python: 3.9.25 (main, Nov  3 2025, 22:33:05) [GCC 11.2.0]
+    CUDA available: True
+    MUSA available: False
+    numpy_random_seed: 1774359660
+    GPU 0: NVIDIA GeForce RTX 4080
+    CUDA_HOME: /usr/local/cuda-11.8
+    GCC: gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+    PyTorch: 2.1.0
+    PyTorch compiling details: PyTorch built with:
+  - GCC 9.3
+  - C++ Version: 201703
+  - Intel(R) oneAPI Math Kernel Library Version 2023.1-Product Build 20230303 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v3.1.1 (Git Hash 64f6bcbcbab628e96f33a62c3e975f8535a7bde4)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 12.1
+  - NVCC architecture flags: -gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_90,code=sm_90
+  - CuDNN 8.9.2
+  - Magma 2.6.1
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=12.1, CUDNN_VERSION=8.9.2, CXX_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/c++, CXX_FLAGS= -D_GLIBCXX_USE_CXX11_ABI=0 -fabi-version=11 -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOROCTRACER -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=old-style-cast -Wno-invalid-partial-specialization -Wno-unused-private-field -Wno-aligned-allocation-unavailable -Wno-missing-braces -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Werror=cast-function-type -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_DISABLE_GPU_ASSERTS=ON, TORCH_VERSION=2.1.0, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+    TorchVision: 0.16.0
+    OpenCV: 4.9.0
+    MMEngine: 0.10.7
+
+Runtime environment:
+    cudnn_benchmark: False
+    mp_cfg: {'mp_start_method': 'fork', 'opencv_num_threads': 0}
+    dist_cfg: {'backend': 'nccl'}
+    seed: 1774359660
+    Distributed launcher: none
+    Distributed training: False
+    GPU number: 1
+------------------------------------------------------------
+
+01/20 16:20:49 - mmengine - [4m[97mINFO[0m - Config:
+auto_scale_lr = dict(base_batch_size=128, enable=False)
+backend_args = None
+data_root = '/mnt/Documents/Dad/github/DUP/yolo_to_coco/output/'
+dataset_type = 'CocoDataset'
+default_hooks = dict(
+    checkpoint=dict(interval=1, type='CheckpointHook'),
+    logger=dict(interval=50, type='LoggerHook'),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    timer=dict(type='IterTimerHook'),
+    visualization=dict(type='DetVisualizationHook'))
+default_scope = 'mmdet'
+env_cfg = dict(
+    cudnn_benchmark=False,
+    dist_cfg=dict(backend='nccl'),
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
+image_folder_TrainVal = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/TrainVal/'
+image_folder_test = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/test/'
+image_folder_val = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/val/'
+launcher = 'none'
+load_from = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_TrainVal_training_5times/centernet_seed_1/epoch_74.pth'
+log_level = 'INFO'
+log_processor = dict(by_epoch=True, type='LogProcessor', window_size=50)
+max_epochs = 28
+metainfo = dict(
+    classes=(
+        'U',
+        'D',
+        'P',
+    ),
+    palette=[
+        (
+            220,
+            20,
+            60,
+        ),
+        (
+            119,
+            11,
+            32,
+        ),
+        (
+            0,
+            0,
+            142,
+        ),
+    ])
+model = dict(
+    backbone=dict(
+        depth=18,
+        init_cfg=dict(checkpoint='torchvision://resnet18', type='Pretrained'),
+        norm_cfg=dict(type='BN'),
+        norm_eval=False,
+        type='ResNet'),
+    bbox_head=dict(
+        feat_channels=64,
+        in_channels=64,
+        loss_center_heatmap=dict(loss_weight=1.0, type='GaussianFocalLoss'),
+        loss_offset=dict(loss_weight=1.0, type='L1Loss'),
+        loss_wh=dict(loss_weight=0.1, type='L1Loss'),
+        num_classes=3,
+        type='CenterNetHead'),
+    data_preprocessor=dict(
+        bgr_to_rgb=True,
+        mean=[
+            123.675,
+            116.28,
+            103.53,
+        ],
+        std=[
+            58.395,
+            57.12,
+            57.375,
+        ],
+        type='DetDataPreprocessor'),
+    neck=dict(
+        in_channels=512,
+        num_deconv_filters=(
+            256,
+            128,
+            64,
+        ),
+        num_deconv_kernels=(
+            4,
+            4,
+            4,
+        ),
+        type='CTResNetNeck',
+        use_dcn=False),
+    test_cfg=dict(local_maximum_kernel=3, max_per_img=100, topk=100),
+    train_cfg=None,
+    type='CenterNet')
+optim_wrapper = dict(
+    clip_grad=dict(max_norm=35, norm_type=2),
+    optimizer=dict(lr=0.0025, momentum=0.9, type='SGD', weight_decay=0.0001),
+    type='OptimWrapper')
+param_scheduler = [
+    dict(
+        begin=0, by_epoch=False, end=500, start_factor=0.001, type='LinearLR'),
+    dict(
+        begin=0,
+        by_epoch=True,
+        end=100,
+        gamma=0.1,
+        milestones=[
+            70,
+            90,
+        ],
+        type='MultiStepLR'),
+]
+resume = False
+test_cfg = dict(type='TestLoop')
+test_dataloader = dict(
+    batch_size=8,
+    dataset=dict(
+        ann_file='test.json',
+        backend_args=None,
+        data_prefix=dict(
+            img=
+            '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/test/'
+        ),
+        data_root='/mnt/Documents/Dad/github/DUP/yolo_to_coco/output/',
+        metainfo=dict(
+            classes=(
+                'U',
+                'D',
+                'P',
+            ),
+            palette=[
+                (
+                    220,
+                    20,
+                    60,
+                ),
+                (
+                    119,
+                    11,
+                    32,
+                ),
+                (
+                    0,
+                    0,
+                    142,
+                ),
+            ]),
+        pipeline=[
+            dict(backend_args=None, to_float32=True, type='LoadImageFromFile'),
+            dict(
+                border=None,
+                crop_size=None,
+                mean=[
+                    123.675,
+                    116.28,
+                    103.53,
+                ],
+                ratios=None,
+                std=[
+                    58.395,
+                    57.12,
+                    57.375,
+                ],
+                test_mode=True,
+                test_pad_mode=[
+                    'logical_or',
+                    31,
+                ],
+                to_rgb=True,
+                type='RandomCenterCropPad'),
+            dict(type='LoadAnnotations', with_bbox=True),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                    'border',
+                ),
+                type='PackDetInputs'),
+        ],
+        test_mode=True,
+        type='CocoDataset'),
+    drop_last=False,
+    num_workers=8,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+test_evaluator = dict(
+    ann_file='/mnt/Documents/Dad/github/DUP/yolo_to_coco/output/test.json',
+    backend_args=None,
+    format_only=False,
+    metric='bbox',
+    outfile_prefix=
+    '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_test_results',
+    type='CocoMetric')
+test_pipeline = [
+    dict(backend_args=None, to_float32=True, type='LoadImageFromFile'),
+    dict(
+        border=None,
+        mean=[
+            0,
+            0,
+            0,
+        ],
+        ratios=None,
+        std=[
+            1,
+            1,
+            1,
+        ],
+        test_mode=True,
+        test_pad_add_pix=1,
+        test_pad_mode=[
+            'logical_or',
+            31,
+        ],
+        to_rgb=True,
+        type='RandomCenterCropPad'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(
+        meta_keys=(
+            'img_id',
+            'img_path',
+            'ori_shape',
+            'img_shape',
+            'border',
+        ),
+        type='PackDetInputs'),
+]
+train_cfg = dict(max_epochs=100, type='EpochBasedTrainLoop', val_interval=1)
+train_dataloader = dict(
+    batch_sampler=dict(type='AspectRatioBatchSampler'),
+    batch_size=8,
+    dataset=dict(
+        dataset=dict(
+            ann_file='TrainVal.json',
+            backend_args=None,
+            data_prefix=dict(
+                img=
+                '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/TrainVal/'
+            ),
+            data_root='/mnt/Documents/Dad/github/DUP/yolo_to_coco/output/',
+            filter_cfg=dict(filter_empty_gt=False, min_size=32),
+            metainfo=dict(
+                classes=(
+                    'U',
+                    'D',
+                    'P',
+                ),
+                palette=[
+                    (
+                        220,
+                        20,
+                        60,
+                    ),
+                    (
+                        119,
+                        11,
+                        32,
+                    ),
+                    (
+                        0,
+                        0,
+                        142,
+                    ),
+                ]),
+            pipeline=[
+                dict(
+                    backend_args=None,
+                    to_float32=True,
+                    type='LoadImageFromFile'),
+                dict(type='LoadAnnotations', with_bbox=True),
+                dict(
+                    crop_size=(
+                        320,
+                        320,
+                    ),
+                    mean=[
+                        123.675,
+                        116.28,
+                        103.53,
+                    ],
+                    ratios=(
+                        0.6,
+                        0.7,
+                        0.8,
+                        0.9,
+                        1.0,
+                        1.1,
+                        1.2,
+                        1.3,
+                    ),
+                    std=[
+                        58.395,
+                        57.12,
+                        57.375,
+                    ],
+                    test_pad_mode=None,
+                    to_rgb=True,
+                    type='RandomCenterCropPad'),
+                dict(prob=0.0, type='RandomFlip'),
+                dict(type='PackDetInputs'),
+            ],
+            type='CocoDataset'),
+        times=1,
+        type='RepeatDataset'),
+    num_workers=8,
+    persistent_workers=True,
+    sampler=dict(shuffle=True, type='DefaultSampler'))
+train_pipeline = [
+    dict(backend_args=None, type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(
+        brightness_delta=32,
+        contrast_range=(
+            0.5,
+            1.5,
+        ),
+        hue_delta=18,
+        saturation_range=(
+            0.5,
+            1.5,
+        ),
+        type='PhotoMetricDistortion'),
+    dict(
+        crop_size=(
+            512,
+            512,
+        ),
+        mean=[
+            0,
+            0,
+            0,
+        ],
+        ratios=(
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            1.0,
+            1.1,
+            1.2,
+            1.3,
+        ),
+        std=[
+            1,
+            1,
+            1,
+        ],
+        test_pad_mode=None,
+        to_rgb=True,
+        type='RandomCenterCropPad'),
+    dict(keep_ratio=True, scale=(
+        512,
+        512,
+    ), type='Resize'),
+    dict(prob=0.5, type='RandomFlip'),
+    dict(type='PackDetInputs'),
+]
+tta_model = dict(
+    tta_cfg=dict(max_per_img=100, nms=dict(iou_threshold=0.5, type='nms')),
+    type='DetTTAModel')
+tta_pipeline = [
+    dict(backend_args=None, to_float32=True, type='LoadImageFromFile'),
+    dict(
+        transforms=[
+            [
+                dict(prob=1.0, type='RandomFlip'),
+                dict(prob=0.0, type='RandomFlip'),
+            ],
+            [
+                dict(
+                    border=None,
+                    mean=[
+                        0,
+                        0,
+                        0,
+                    ],
+                    ratios=None,
+                    std=[
+                        1,
+                        1,
+                        1,
+                    ],
+                    test_mode=True,
+                    test_pad_add_pix=1,
+                    test_pad_mode=[
+                        'logical_or',
+                        31,
+                    ],
+                    to_rgb=True,
+                    type='RandomCenterCropPad'),
+            ],
+            [
+                dict(type='LoadAnnotations', with_bbox=True),
+            ],
+            [
+                dict(
+                    meta_keys=(
+                        'img_id',
+                        'img_path',
+                        'ori_shape',
+                        'img_shape',
+                        'flip',
+                        'flip_direction',
+                        'border',
+                    ),
+                    type='PackDetInputs'),
+            ],
+        ],
+        type='TestTimeAug'),
+]
+val_cfg = dict(type='ValLoop')
+val_dataloader = dict(
+    batch_size=8,
+    dataset=dict(
+        ann_file='test.json',
+        backend_args=None,
+        data_prefix=dict(
+            img=
+            '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/test/'
+        ),
+        data_root='/mnt/Documents/Dad/github/DUP/yolo_to_coco/output/',
+        metainfo=dict(
+            classes=(
+                'U',
+                'D',
+                'P',
+            ),
+            palette=[
+                (
+                    220,
+                    20,
+                    60,
+                ),
+                (
+                    119,
+                    11,
+                    32,
+                ),
+                (
+                    0,
+                    0,
+                    142,
+                ),
+            ]),
+        pipeline=[
+            dict(backend_args=None, to_float32=True, type='LoadImageFromFile'),
+            dict(
+                border=None,
+                crop_size=None,
+                mean=[
+                    123.675,
+                    116.28,
+                    103.53,
+                ],
+                ratios=None,
+                std=[
+                    58.395,
+                    57.12,
+                    57.375,
+                ],
+                test_mode=True,
+                test_pad_mode=[
+                    'logical_or',
+                    31,
+                ],
+                to_rgb=True,
+                type='RandomCenterCropPad'),
+            dict(type='LoadAnnotations', with_bbox=True),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                    'border',
+                ),
+                type='PackDetInputs'),
+        ],
+        test_mode=True,
+        type='CocoDataset'),
+    drop_last=False,
+    num_workers=8,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+val_evaluator = dict(
+    ann_file='/mnt/Documents/Dad/github/DUP/yolo_to_coco/output/test.json',
+    backend_args=None,
+    format_only=False,
+    metric='bbox',
+    type='CocoMetric')
+vis_backends = [
+    dict(type='LocalVisBackend'),
+]
+visualizer = dict(
+    name='visualizer',
+    type='DetLocalVisualizer',
+    vis_backends=[
+        dict(type='LocalVisBackend'),
+    ])
+work_dir = 'work_dirs/centernet_test_output'
+
+01/20 16:20:50 - mmengine - [4m[97mINFO[0m - Distributed training is not used, all SyncBatchNorm (SyncBN) layers in the model will be automatically reverted to BatchNormXd layers if they are used.
+01/20 16:20:50 - mmengine - [4m[97mINFO[0m - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+before_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DistSamplerSeedHook                
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) IterTimerHook                      
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_val_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DetVisualizationHook               
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_val_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_test_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_test_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_test_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DetVisualizationHook               
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_run:
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+loading annotations into memory...
+Done (t=0.00s)
+creating index...
+index created!
+loading annotations into memory...
+Done (t=0.00s)
+creating index...
+index created!
+Loads checkpoint by local backend from path: /mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_TrainVal_training_5times/centernet_seed_1/epoch_74.pth
+01/20 16:20:51 - mmengine - [4m[97mINFO[0m - Load checkpoint from /mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_TrainVal_training_5times/centernet_seed_1/epoch_74.pth
+01/20 16:20:53 - mmengine - [4m[97mINFO[0m - Epoch(test) [50/67]    eta: 0:00:00  time: 0.0455  data_time: 0.0077  memory: 188  
+01/20 16:20:54 - mmengine - [4m[97mINFO[0m - Evaluating bbox...
+Loading and preparing results...
+DONE (t=0.10s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *bbox*
+DONE (t=0.54s).
+Accumulating evaluation results...
+DONE (t=0.40s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.750
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=1000 ] = 0.962
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=1000 ] = 0.883
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.287
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.655
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.806
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.802
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=300 ] = 0.802
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=1000 ] = 0.802
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.378
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.720
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.856
+01/20 16:20:56 - mmengine - [4m[97mINFO[0m - bbox_mAP_copypaste: 0.750 0.962 0.883 0.287 0.655 0.806
+01/20 16:20:56 - mmengine - [4m[97mINFO[0m - Epoch(test) [67/67]    coco/bbox_mAP: 0.7500  coco/bbox_mAP_50: 0.9620  coco/bbox_mAP_75: 0.8830  coco/bbox_mAP_s: 0.2870  coco/bbox_mAP_m: 0.6550  coco/bbox_mAP_l: 0.8060  data_time: 0.0074  time: 0.0450

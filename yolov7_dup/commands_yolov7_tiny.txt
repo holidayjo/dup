@@ -12,6 +12,35 @@ python train.py \
     --epochs 100 \
     --seed 0
 
+### SD_net training 2h6a ###
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch-size 200 \
+    --data data/DUP_scratch_train_val.yaml \
+    --img 320 320 \
+    --cfg cfg/training/udp_dpf_2h_6a.yaml \
+    --weights '' \
+    --name SD_net_train_val_from_scratch_320_ \
+    --hyp data/hyp.scratch.tiny_udp.yaml \
+    --epochs 100 \
+    --seed 0
+
+### SD_net TrainVal 2h6a ###
+python train.py \
+    --workers 8 \
+    --device 0 \
+    --batch-size 200 \
+    --data data/DUP_scratch_TrainVal.yaml \
+    --img 320 320 \
+    --cfg cfg/training/udp_dpf_2h_6a.yaml \
+    --weights '' \
+    --name SD_net_TrainVal_from_scratch_320_ \
+    --hyp data/hyp.scratch.tiny_udp.yaml \
+    --epochs 181 \
+    --seed 0
+
+
 ### TrainVal vs test seed sweep ###
 for seed in {0..4}
 do

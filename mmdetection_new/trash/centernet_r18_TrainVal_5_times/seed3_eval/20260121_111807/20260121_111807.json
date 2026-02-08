@@ -1,0 +1,1 @@
+{"coco/U_precision": 0.761, "coco/D_precision": 0.769, "coco/P_precision": 0.803, "coco/bbox_mAP": 0.777, "coco/bbox_mAP_50": 0.97, "coco/bbox_mAP_75": 0.919, "coco/bbox_mAP_s": 0.391, "coco/bbox_mAP_m": 0.68, "coco/bbox_mAP_l": 0.836, "data_time": 0.025663845679339242, "time": 0.05362603944890639}

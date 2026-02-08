@@ -79,18 +79,20 @@ model = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile', to_float32=True), # CenterNet 필수 옵션
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(
-        type='RandomChoiceResize',
-        scales=[(1333, 640), (1333, 672), (1333, 704), (1333, 736),
-                (1333, 768), (1333, 800)],
-        keep_ratio=True),
+    dict(type='Resize', scale=(320, 320), keep_ratio=False),
+    # dict(
+    #     type='RandomChoiceResize',
+    #     scales=[(1333, 640), (1333, 672), (1333, 704), (1333, 736),
+    #             (1333, 768), (1333, 800)],
+    #     keep_ratio=True),
     dict(type='RandomFlip', prob=0.0), # 승객 데이터셋 특성상 Flip 비활성화
     dict(type='PackDetInputs')
 ]
 
 test_pipeline = [
     dict(type='LoadImageFromFile', to_float32=True),
-    dict(type='Resize', scale=(1333, 800), keep_ratio=True),
+    # dict(type='Resize', scale=(1333, 800), keep_ratio=True),
+    dict(type='Resize', scale=(320, 320), keep_ratio=False),
     dict(type='LoadAnnotations', with_bbox=True),
     dict(type='PackDetInputs', 
          meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape', 'scale_factor'))
@@ -98,8 +100,8 @@ test_pipeline = [
 
 # 4. DATALOADERS
 train_dataloader = dict(
-    batch_size=4, # RTX 4080 메모리 고려 (필요시 8로 상향 가능)
-    num_workers=4,
+    batch_size=80,
+    num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
@@ -148,7 +150,7 @@ test_evaluator = dict(
     metric='bbox')
 
 # 6. SCHEDULE (100 Epochs)
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=34, val_interval=1)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=8, val_interval=1)
 val_cfg   = dict(type='ValLoop')
 test_cfg  = dict(type='TestLoop')
 
@@ -168,7 +170,7 @@ default_hooks = dict(
     logger=dict(type='LoggerHook', interval=50)
 )
 
-work_dir = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_r50_udp_TrainVal_epoch_34_seed'
+work_dir = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_r50_udp_TrainVal_epoch_8_seed'
 
 # 지정하신 Pretrained Weight 경로
 load_from = '/mnt/Documents/Dad/github/DUP/mmdetection_new/pre_trained_weights/centernet-update_r50-caffe_fpn_ms-1x_coco_20230512_203845-8306baf2.pth'
