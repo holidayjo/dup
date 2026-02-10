@@ -27,18 +27,31 @@ python train.py \
     --seed 0
 
 ### SD_net TrainVal 2h6a ###
-python train.py \
-    --workers 8 \
-    --device 0 \
-    --batch-size 200 \
-    --data data/DUP_scratch_TrainVal.yaml \
-    --img 320 320 \
-    --cfg cfg/training/udp_dpf_2h_6a.yaml \
-    --weights '' \
-    --name SD_net_TrainVal_from_scratch_320_ \
-    --hyp data/hyp.scratch.tiny_udp.yaml \
-    --epochs 181 \
-    --seed 0
+import subprocess
+
+seeds = range(5)  # 0, 1, 2, 3, 4
+
+for seed in seeds:
+    name = f"SD_net_TrainVal_2h6a_from_scratch_320_seed{seed}"
+    
+    command = [
+        "python", "train.py",
+        "--workers", "8",
+        "--device", "0",
+        "--batch-size", "200",
+        "--data", "data/DUP_scratch_TrainVal.yaml",
+        "--img", "320", "320",
+        "--cfg", "cfg/training/udp_dpf_2h_6a.yaml",
+        "--weights", "''",
+        "--name", name,
+        "--hyp", "data/hyp.scratch.tiny_udp.yaml",
+        "--epochs", "181",
+        "--seed", str(seed)
+    ]
+    
+    print(f"--- Running {name} ---")
+    subprocess.run(command)
+
 
 
 ### TrainVal vs test seed sweep ###
