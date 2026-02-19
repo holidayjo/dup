@@ -60,14 +60,14 @@ def time_synchronized():
 
 
 # # # for centernet
-config_file     = '/mnt/Documents/Dad/github/DUP/mmdetection_new/configs/_config_2026/UDP_centernet_TrainVal_test.py'
-checkpoint_file = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet_r18_TrainVal_5_times/seed0/epoch_50.pth'
+# config_file     = '/mnt/Documents/Dad/github/DUP/mmdetection_new/configs/_config_2026/UDP_centernet_resnet50_TrainVal.py'
+# checkpoint_file = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/centernet/centernet_r50_TrainVal_epoch_8/seed0/epoch_8.pth'
 
 
 
 # Configuration
-# config_file     = '/mnt/Documents/Dad/github/DUP/mmdetection_new/configs/_config_2026/UDP_faster_rcnn_TranVal_test.py'
-# checkpoint_file = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/faster_rcnn_r18_TrainVal_17e_5_times/seed0/epoch_17.pth'
+config_file     = '/mnt/Documents/Dad/github/DUP/mmdetection_new/configs/_config_2026/UDP_faster_rcnn_resnet50_TrainVal_2.py'
+checkpoint_file = '/mnt/Documents/Dad/github/DUP/mmdetection_new/work_dirs/fasterrcnn/faster_rcnn_r50_TrainVal_epoch_13/seed0/epoch_13.pth'
 img_path        = '/mnt/Documents/Dad/github/DUP/DATA/Euljiro/1_balanced_simulation/test/4_025950.jpg'
 
 # 1. Build the model
