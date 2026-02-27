@@ -139,8 +139,20 @@ def run(
 
                     if save_img or save_crop or view_img:  # Add bbox to image
                         c = int(cls)  # integer class
-                        label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
-                        annotator.box_label(xyxy, label, color=colors(c, True))
+                        class_name = names[c]  # Get the actual string name (e.g., 'D', 'U', 'P')
+                        label = None if hide_labels else (class_name if hide_conf else f'{class_name} {conf:.2f}')
+                        
+                        # Map BGR colors directly to the class names
+                        custom_colors = {
+                            'D': (36, 231, 38),   # Greenish
+                            'U': (233, 196, 123), # Sky Blue
+                            'P': (0, 0, 255)      # Pure Red
+                        }
+                        
+                        # Fetch the custom color. If the class name isn't D, U, or P, fall back to default.
+                        box_color = custom_colors.get(class_name, colors(c, True))
+                        
+                        annotator.box_label(xyxy, label, color=box_color)
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 

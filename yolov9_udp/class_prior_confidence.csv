@@ -1,0 +1,4 @@
+Class,Precision (Prior Conf),Recall
+D,0.96,0.93
+U,0.956,0.94
+P,0.929,0.944
