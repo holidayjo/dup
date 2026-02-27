@@ -139,18 +139,18 @@ def run(
 
                     if save_img or save_crop or view_img:  # Add bbox to image
                         c = int(cls)  # integer class
-                        class_name = names[c]  # Get the actual string name (e.g., 'D', 'U', 'P')
-                        label = None if hide_labels else (class_name if hide_conf else f'{class_name} {conf:.2f}')
+                        label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                         
-                        # Map BGR colors directly to the class names
-                        custom_colors = {
-                            'D': (36, 231, 38),   # Greenish
-                            'U': (233, 196, 123), # Sky Blue
-                            'P': (0, 0, 255)      # Pure Red
-                        }
+                        # Custom BGR colors for D, U, P
+                        custom_colors = [
+                            (36, 231, 38),   # D: Greenish (Class 0)
+                            (233, 196, 123), # U: Light Blue (Class 1)
+                            (237,125,49),    # P: Orange (Class 2)
+                            # (0, 0, 255)      # Default Red (Class 3 and beyond)
+                        ]
                         
-                        # Fetch the custom color. If the class name isn't D, U, or P, fall back to default.
-                        box_color = custom_colors.get(class_name, colors(c, True))
+                        # Apply custom color if class is 0, 1, or 2. Fall back to YOLO defaults otherwise.
+                        box_color = custom_colors[c] if c < len(custom_colors) else colors(c, True)
                         
                         annotator.box_label(xyxy, label, color=box_color)
                     if save_crop:
