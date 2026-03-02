@@ -1,0 +1,6 @@
+Seed,Class,Images,Instances,Precision,Recall,mAP50,mAP50-95
+0,all,,,,,0.967,0.754
+1,all,,,,,0.966,0.76
+2,all,,,,,0.958,0.737
+3,all,,,,,0.96,0.744
+4,all,,,,,0.964,0.758
