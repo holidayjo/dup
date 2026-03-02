@@ -300,3 +300,13 @@ do
         --epochs 116 \
         --seed $seed
 done
+
+
+# SD net json output for pr curve.
+python test.py \
+  --data data/DUP_bal_TrainVal.yaml \
+  --weights runs/train/SD_net_TrainVal_2h6a_from_scratch_320_seed0/weights/last.pt \
+  --task test \
+  --save-json \
+  --conf 0.001 \
+  --iou 0.65
