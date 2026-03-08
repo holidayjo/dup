@@ -532,7 +532,7 @@ if __name__ == '__main__':
     parser.add_argument('--weights', type=str, default='yolov7-tiny.pt', help='initial weights path')
     parser.add_argument('--cfg', type=str, default='yolov7_dup/cfg/training/yolov7-tiny_DUP.yaml', help='model.yaml path')
     parser.add_argument('--data', type=str, default='/home/hj/Desktop/Dad/github/DUP/yolov7_dup/data/DUP_data.yaml', help='data.yaml path')
-    parser.add_argument('--hyp', type=str, default='/home/hj/Desktop/Dad/github/DUP/yolov7_dup/data/hyp.scratch.tiny_udp.yaml', help='hyperparameters path')
+    parser.add_argument('--hyp', type=str, default='data/hyp.scratch.tiny_udp.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=100)
     parser.add_argument('--batch-size', type=int, default=300, help='total batch size for all GPUs')
     parser.add_argument('--img-size', nargs='+', type=int, default=[320, 320], help='[train, test] image sizes')
