@@ -23,7 +23,7 @@ The data was collected and utilized under an official collaboration with Seoul M
 If you find this project or our modifications useful in your research, please consider citing our paper:
 
 ```bibtex
-@article{pmes_tits_2026,
+@article{** To be updated **,
   title={** To be updated **},
   author={** To be updated **},
   journal={IEEE Transactions on Intelligent Transportation Systems},
