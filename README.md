@@ -1,30 +1,31 @@
-DUP project.
-This is a private project for dup.
+# DUP Project: Passenger Movement Estimation System (PMES)
 
-I clearly mention that I copied mmdetection, yolov7 and yolov9 official repository in the link below.
+This repository contains the official implementation and modified codebases for our research on real-time passenger movement estimation for subway door safety. This project was developed to evaluate and benchmark various object detection models.
 
-https://github.com/WongKinYiu/yolov7
+## 📌 Acknowledgements and Base Repositories
+Our implementation builds upon several excellent open-source repositories. We sincerely thank the authors for making their code public. To fit our specific experimental setup and hardware constraints, the base codes were modified from the following original repositories:
 
-https://github.com/WongKinYiu/yolov9
+**Detection Models:**
+* [YOLOv9 Official Repository](https://github.com/WongKinYiu/yolov9) by WongKinYiu
+* [YOLOv7 Official Repository](https://github.com/WongKinYiu/yolov7) by WongKinYiu
+* [MMDetection](https://github.com/open-mmlab/mmdetection) by OpenMMLab (Used for CenterNet and Faster R-CNN baselines)
 
-https://github.com/open-mmlab/mmdetection
+**Annotation Tools:**
+* [LabelImg](https://github.com/heartexlabs/labelImg) by heartexlabs
+* [Yolo-Annotation-Tool-New](https://github.com/ManivannanMurugavel/Yolo-Annotation-Tool-New-) by ManivannanMurugavel
 
+## 📊 Dataset Availability
+Due to strict privacy regulations regarding CCTV footage and significant file size constraints, the dataset used in this study can not be included in this public repository. 
 
+The data was collected and utilized under an official collaboration with Seoul Metro. Researchers interested in utilizing this dataset for academic purposes should contact the corresponding authors via the paper linked below. We are open to discussing official avenues to share the data in compliance with Seoul Metro's security and privacy policies.
 
-For annotation, I used 2 base repositoreis below (LabelImg and Yolo-annotation-Tool-New).
+## 📝 Citation
+If you find this project or our modifications useful in your research, please consider citing our paper:
 
-https://github.com/heartexlabs/labelImg
-
-https://github.com/ManivannanMurugavel/Yolo-Annotation-Tool-New-
-
-Based on the projects above, I modify the codes as my preference.
-
-All dataset are not included in the repository even though it is private repository for 2 reasons - size and privacy.
-If you are interested in the project and the dataset, contact us throughout the paper below. We can find the way to use the dataset officially with Seoul Metro as we did.
-
-"** below. To be updated **."
-
-(The results from the mmdetection is converted to yolo format which is txt file per image throughout result_to_yolo.py file. Not anymore for T-ITS version 2026.)
-
-
-
+```bibtex
+@article{pmes_tits_2026,
+  title={** To be updated **},
+  author={** To be updated **},
+  journal={IEEE Transactions on Intelligent Transportation Systems},
+  year={2026}
+}
