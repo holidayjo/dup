@@ -1,0 +1,2 @@
+1. Train from scratch on ms coco dataset.
+python train.py  --cfg cfg/sd_net_2h_6a.yaml --hyp data/hyp.scratch.tiny.yaml --data data/coco.yaml --weights '' --device 0 --batch-size 300 --epochs 300 --name coco_sd_net5_2h_6a
