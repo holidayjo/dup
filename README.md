@@ -19,13 +19,4 @@ Due to strict privacy regulations regarding CCTV footage and significant file si
 
 The data was collected and utilized under an official collaboration with Seoul Metro. Researchers interested in utilizing this dataset for academic purposes should contact the corresponding authors via the paper linked below. We are open to discussing official avenues to share the data in compliance with Seoul Metro's security and privacy policies.
 
-## 📝 Citation
-If you find this project or our modifications useful in your research, please consider citing our paper:
 
-```bibtex
-@article{** To be updated **,
-  title={** To be updated **},
-  author={** To be updated **},
-  journal={IEEE Transactions on Intelligent Transportation Systems},
-  year={2026}
-}
