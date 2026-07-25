@@ -1,3 +1,7 @@
+# SD-Net Project: Reducing parameters and infernce speed for passenger dataset.
+* Applying prune (Have to solve skip connection)   
+* Applying quantization 
+
 # DUP Project: Passenger Movement Estimation System (PMES)
 
 This repository contains the official implementation and modified codebases for our research on real-time passenger movement estimation for subway door safety. This project was developed to evaluate and benchmark various object detection models.
