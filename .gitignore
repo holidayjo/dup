@@ -17,8 +17,7 @@ yolov9_udp/runs/
 
 # --- Vendored / nested repos ---
 metrics/
-latex/dup_1/
-
+survey_dataset/
 # --- Python & System Garbage ---
 __pycache__/
 *.pyc
