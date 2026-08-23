@@ -18,6 +18,8 @@ yolov9_udp/runs/
 # --- Vendored / nested repos ---
 metrics/
 survey_dataset/
+temporal_vs_single/
+
 # --- Python & System Garbage ---
 __pycache__/
 *.pyc
