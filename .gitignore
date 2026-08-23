@@ -10,7 +10,6 @@ sd_net/coco/
 weights/
 yolov7_udp/runs/
 yolov9_udp/runs/
-yolov9_udp/results_T_ITS_2026/
 *.pt
 *.pth
 *.zip
