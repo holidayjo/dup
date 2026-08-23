@@ -5,7 +5,7 @@ mmdet/
 mmdetection/
 IAA_survey/images_generated/
 sd_net/coco/
-
+latex/
 # --- Model Weights & Archives ---
 weights/
 yolov7_udp/runs/
