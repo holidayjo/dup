@@ -1,6 +1,7 @@
-# SD-Net Project: Reducing parameters and infernce speed for passenger dataset.
+# (New project) SD-Net, Reducing parameters and infernce speed for passenger dataset.
 * Applying prune (Have to solve skip connection)   
 * Applying quantization 
+* Considering split the repository. (20260826)
 
 # DUP Project: Passenger Movement Estimation System (PMES)
 
