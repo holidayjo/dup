@@ -19,6 +19,7 @@ yolov9_udp/runs/
 metrics/
 survey_dataset/
 temporal_vs_single/
+trash/
 
 # --- Python & System Garbage ---
 __pycache__/
